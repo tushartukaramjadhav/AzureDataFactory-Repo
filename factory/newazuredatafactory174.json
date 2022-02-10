@@ -1,0 +1,9 @@
+{
+	"name": "newazuredatafactory174",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "51482f39-0294-4e71-83c5-4e11d34b360a",
+		"tenantId": "e8d51f58-aebd-411c-8276-bc626545fce5"
+	}
+}
