@@ -1,0 +1,40 @@
+{
+	"name": "INDsalesDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "INDsalesboblinkedservice",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "SalesIND_2020_MAY.csv",
+				"container": "realscenario01"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Salesdate",
+				"type": "String"
+			},
+			{
+				"name": "salesItem",
+				"type": "String"
+			},
+			{
+				"name": "country",
+				"type": "String"
+			},
+			{
+				"name": "quantity",
+				"type": "String"
+			}
+		]
+	}
+}

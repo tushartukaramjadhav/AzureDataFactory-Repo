@@ -1,0 +1,39 @@
+{
+	"name": "error rows handling",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "INDsalesDataset",
+						"type": "DatasetReference"
+					},
+					"name": "SalesINDIA"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "salebadrowstable",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable2",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ConditionalSplit1"
+				}
+			],
+			"script": "source(output(\n\t\tSalesdate as string,\n\t\tsalesItem as string,\n\t\tcountry as string,\n\t\tquantity as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> SalesINDIA\nSalesINDIA split(isNull(toDate(Salesdate, 'dd-MMM-yyyy')),\n\tdisjoint: false) ~> ConditionalSplit1@(ErrorRows, GoodRows)\nConditionalSplit1@ErrorRows sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tsalesdate as string,\n\t\tsalesItem as string,\n\t\tcountry as string,\n\t\tquantity as string\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1\nConditionalSplit1@GoodRows sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tsalesdate as date,\n\t\tsalesItem as string,\n\t\tcountry as string,\n\t\tquantity as integer\n\t),\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink2"
+		}
+	}
+}
